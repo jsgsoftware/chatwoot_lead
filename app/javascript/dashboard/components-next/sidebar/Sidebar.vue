@@ -428,6 +428,12 @@ const menuItems = computed(() => {
       ],
     },
     {
+      name: 'Billing',
+      label: 'Billing',
+      icon: 'i-lucide-credit-card',
+      to: accountScopedRoute('billing_settings_index'),
+    },
+    {
       name: 'Portals',
       label: t('SIDEBAR.HELP_CENTER.TITLE'),
       icon: 'i-lucide-library-big',
