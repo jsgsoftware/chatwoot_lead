@@ -86,10 +86,10 @@ const fetchAccountDetails = async () => {
 
 const handleBillingPageLogic = async () => {
   // If self-hosted, redirect to dashboard
-  // if (!isOnChatwootCloud.value) {
-  //   router.push({ name: 'home' });
-  //   return;
-  // }
+  if (!isOnChatwootCloud.value) {
+    router.push({ name: 'home' });
+    return;
+  }
 
   // Check if we've already attempted a refresh for billing setup
   const billingRefreshAttempted = sessionStorage.get(BILLING_REFRESH_ATTEMPTED);

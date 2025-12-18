@@ -36,6 +36,8 @@ const emit = defineEmits([
 ]);
 
 const { accountScopedRoute, isOnChatwootCloud } = useAccount();
+// Get current user role from Vuex store
+const currentRole = useMapGetter('auth/getCurrentRole');
 const store = useStore();
 const searchShortcut = useKbd([`$mod`, 'k']);
 const { t } = useI18n();
@@ -129,7 +131,9 @@ const newReportRoutes = () => [
 const reportRoutes = computed(() => newReportRoutes());
 
 const menuItems = computed(() => {
-  return [
+  // Only show Kanban and Billing to SuperAdmin
+  const isSuperAdmin = currentRole.value === 'superadmin';
+  const items = [
     {
       name: 'Inbox',
       label: t('SIDEBAR.INBOX'),
@@ -427,12 +431,25 @@ const menuItems = computed(() => {
         },
       ],
     },
-    {
-      name: 'Billing',
-      label: 'Billing',
-      icon: 'i-lucide-credit-card',
-      to: accountScopedRoute('billing_settings_index'),
-    },
+    // Kanban (SuperAdmin only)
+    ...(isSuperAdmin
+      ? [{
+          name: 'Kanban',
+          label: t('SIDEBAR.KANBAN'),
+          icon: 'i-lucide-kanban',
+          to: accountScopedRoute('kanban_index'),
+          activeOn: ['kanban_index'],
+        }]
+      : []),
+    // Billing (SuperAdmin only)
+    ...(isSuperAdmin
+      ? [{
+          name: 'Billing',
+          label: 'Billing',
+          icon: 'i-lucide-credit-card',
+          to: accountScopedRoute('billing_settings_index'),
+        }]
+      : []),
     {
       name: 'Portals',
       label: t('SIDEBAR.HELP_CENTER.TITLE'),
@@ -596,6 +613,7 @@ const menuItems = computed(() => {
       ],
     },
   ];
+  return items;
 });
 </script>
 

@@ -1,6 +1,7 @@
 import { frontendURL } from '../../../../helper/URLHelper';
 import SettingsWrapper from '../SettingsWrapper.vue';
 import Index from './Index.vue';
+import SelfHostedBilling from './SelfHostedBilling.vue';
 
 export default {
   routes: [
@@ -19,6 +20,14 @@ export default {
         {
           path: '',
           name: 'billing_settings_index',
+          component: SelfHostedBilling,
+          meta: {
+            permissions: ['administrator'],
+          },
+        },
+        {
+          path: 'cloud',
+          name: 'billing_settings_cloud',
           component: Index,
           meta: {
             permissions: ['administrator'],
