@@ -1,0 +1,16 @@
+{
+  "KANBAN": {
+    "HEADER_TITLE": "Kanban Board",
+    "EMPTY_STATE_TITLE": "No conversations available",
+    "EMPTY_STATE_MESSAGE": "There are no conversations to display on the Kanban board.",
+    "COLUMNS": {
+      "OPEN": "Open",
+      "RESOLVED": "Resolved",
+      "PENDING": "Pending",
+      "SNOOZED": "Snoozed"
+    },
+    "CONVERSATION_COUNT": "{count} conversation | {count} conversations",
+    "DRAG_MESSAGE": "Drag conversations to change their status",
+    "STATUS_CHANGED": "Conversation status updated successfully"
+  }
+}
