@@ -1,4 +1,5 @@
 <script setup>
+import { getUserRole } from 'dashboard/helper/permissionsHelper';
 import { computed, ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore, useMapGetter } from 'dashboard/composables/store';
@@ -9,10 +10,29 @@ import Icon from 'dashboard/components-next/icon/Icon.vue';
 import { dynamicTime, shortTimestamp } from 'shared/helpers/timeHelper';
 import { getLastMessage } from 'dashboard/helper/conversationHelper';
 import { useMessageFormatter } from 'shared/composables/useMessageFormatter';
+import { useRouter } from 'vue-router';
+
 
 const { t } = useI18n();
 const store = useStore();
+const router = useRouter();
 const { getPlainText } = useMessageFormatter();
+
+// Obtener variable de entorno (Vite expone import.meta.env)
+const showKanban = import.meta.env.VITE_SHOW_KANBAN === 'true';
+
+// Obtener usuario y rol actual
+const currentUser = store.getters['getCurrentUser'];
+const accountId = router.currentRoute.value.params.accountId;
+const userRole = getUserRole(currentUser, accountId);
+
+// Lógica de visibilidad
+const canShowKanban = computed(() => {
+  if (showKanban) {
+    return userRole === 'administrator' || userRole === 'superadmin';
+  }
+  return userRole === 'superadmin';
+});
 
 const STATUS_TYPES = wootConstants.STATUS_TYPE;
 
@@ -115,10 +135,22 @@ const onDragEnd = () => {
   draggedConversation.value = null;
   draggedFromColumn.value = null;
 };
+
+function openConversation(conversation) {
+  // Obtener el accountId desde la ruta actual
+  const accountId = router.currentRoute.value.params.accountId;
+  router.push({
+    name: 'inbox_conversation',
+    params: {
+      accountId,
+      conversation_id: conversation.id,
+    },
+  });
+}
 </script>
 
 <template>
-  <div class="flex flex-col h-screen bg-n-background">
+  <div v-if="canShowKanban" class="flex flex-col h-screen bg-n-background">
     <!-- Header -->
     <div class="flex items-center justify-between px-6 py-4 border-b border-n-slate-3 flex-shrink-0">
       <h1 class="text-2xl font-semibold text-n-slate-12">
@@ -173,10 +205,11 @@ const onDragEnd = () => {
           <div
             v-for="conversation in column.conversations"
             :key="conversation.id"
-            draggable="true"
             class="flex flex-col gap-2 p-3 transition-all duration-200 rounded-lg cursor-move bg-n-background hover:shadow-md hover:scale-[1.02]"
-            @dragstart="onDragStart($event, conversation, column.key)"
+            draggable="true"
+            @dragstart="onDragStart($event, conversation, column)"
             @dragend="onDragEnd"
+            :class="{ 'dragging': draggingConversationId === conversation.id }"
           >
             <!-- Contact Info -->
             <div class="flex items-center gap-2">
@@ -194,6 +227,14 @@ const onDragEnd = () => {
                   {{ getInboxName(conversation) }}
                 </p>
               </div>
+              <!-- Eye Icon Button -->
+              <button
+                class="ml-2 p-1 rounded hover:bg-n-alpha-2 focus:outline-none"
+                @click.stop="openConversation(conversation)"
+                :title="t('KANBAN.VIEW_CONVERSATION')"
+              >
+                <Icon icon="i-lucide-eye" class="size-5 text-n-slate-11" />
+              </button>
             </div>
 
             <!-- Last Message -->
@@ -226,5 +267,8 @@ const onDragEnd = () => {
         </div>
       </div>
     </div>
+  </div>
+  <div v-else class="flex items-center justify-center h-screen">
+    <!-- No mostrar nada o mensaje opcional -->
   </div>
 </template>
