@@ -56,7 +56,14 @@ const toggleShortcutModalFn = show => {
 
 useSidebarKeyboardShortcuts(toggleShortcutModalFn);
 
-const expandedItem = ref(null);
+// We're using localStorage to store the expanded item in the sidebar
+// This helps preserve context when navigating between portal and dashboard layouts
+// and also when the user refreshes the page
+const expandedItem = useStorage(
+  'next-sidebar-expanded-item',
+  null,
+  sessionStorage
+);
 
 const setExpandedItem = name => {
   expandedItem.value = expandedItem.value === name ? null : name;
