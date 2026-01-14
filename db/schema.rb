@@ -1239,9 +1239,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_12_092041) do
   create_table "webhooks", force: :cascade do |t|
     t.integer "account_id"
     t.integer "inbox_id"
-  t.string "url"
-  t.datetime "created_at", precision: nil, null: false
-  t.datetime "updated_at", precision: nil, null: false
+    t.string "url"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "webhook_type", default: 0
     t.jsonb "subscriptions", default: ["conversation_status_changed", "conversation_updated", "conversation_created", "contact_created", "contact_updated", "message_created", "message_updated", "webwidget_triggered"]
     t.string "name"

@@ -55,19 +55,24 @@ const toggleShortcutModalFn = show => {
 };
 
 useSidebarKeyboardShortcuts(toggleShortcutModalFn);
-
-// We're using localStorage to store the expanded item in the sidebar
-// This helps preserve context when navigating between portal and dashboard layouts
-// and also when the user refreshes the page
-const expandedItem = useStorage(
-  'next-sidebar-expanded-item',
-  null,
-  sessionStorage
-);
-
-const setExpandedItem = name => {
-  expandedItem.value = expandedItem.value === name ? null : name;
-};
+    // Mostrar Billing solo para SuperAdmin
+    ...(isSuperAdmin
+      ? [{
+          name: 'Settings Billing',
+          label: t('SIDEBAR.BILLING'),
+          icon: 'i-lucide-credit-card',
+          to: accountScopedRoute('billing_settings_index'),
+        }]
+      : []),
+    // Mostrar Kanban solo para SuperAdmin (ajusta la ruta si existe)
+    ...(isSuperAdmin
+      ? [{
+          name: 'Kanban',
+          label: t('SIDEBAR.KANBAN'),
+          icon: 'i-lucide-layout-kanban',
+          to: accountScopedRoute('kanban_index'),
+        }]
+      : []),
 provideSidebarContext({
   expandedItem,
   setExpandedItem,
@@ -457,6 +462,19 @@ const menuItems = computed(() => {
           to: accountScopedRoute('billing_settings_index'),
         }]
       : []),
+    {
+      name: 'Kanban',
+      label: t('SIDEBAR.KANBAN'),
+      icon: 'i-lucide-kanban',
+      to: accountScopedRoute('kanban_index'),
+      activeOn: ['kanban_index'],
+    },
+    {
+      name: 'Billing',
+      label: 'Billing',
+      icon: 'i-lucide-credit-card',
+      to: accountScopedRoute('billing_settings_index'),
+    },
     {
       name: 'Portals',
       label: t('SIDEBAR.HELP_CENTER.TITLE'),
