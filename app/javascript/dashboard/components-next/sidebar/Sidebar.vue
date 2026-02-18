@@ -90,6 +90,11 @@ const isEffectivelyCollapsed = computed(
   () => !isMobile.value && isCollapsed.value
 );
 
+const expandedItem = ref(null);
+const setExpandedItem = name => {
+  expandedItem.value = expandedItem.value === name ? null : name;
+};
+
 // Resize handle logic
 const isResizing = ref(false);
 const startX = ref(0);
