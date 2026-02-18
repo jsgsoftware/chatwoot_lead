@@ -74,24 +74,6 @@ const toggleShortcutModalFn = show => {
 };
 
 useSidebarKeyboardShortcuts(toggleShortcutModalFn);
-    // Mostrar Billing solo para SuperAdmin
-    ...(isSuperAdmin
-      ? [{
-          name: 'Settings Billing',
-          label: t('SIDEBAR.BILLING'),
-          icon: 'i-lucide-credit-card',
-          to: accountScopedRoute('billing_settings_index'),
-        }]
-      : []),
-    // Mostrar Kanban solo para SuperAdmin (ajusta la ruta si existe)
-    ...(isSuperAdmin
-      ? [{
-          name: 'Kanban',
-          label: t('SIDEBAR.KANBAN'),
-          icon: 'i-lucide-layout-kanban',
-          to: accountScopedRoute('kanban_index'),
-        }]
-      : []),
 
 const {
   sidebarWidth,
@@ -551,24 +533,11 @@ const menuItems = computed(() => {
     ...(isSuperAdmin
       ? [{
           name: 'Billing',
-          label: 'Billing',
+          label: t('SIDEBAR.BILLING'),
           icon: 'i-lucide-credit-card',
           to: accountScopedRoute('billing_settings_index'),
         }]
       : []),
-    {
-      name: 'Kanban',
-      label: t('SIDEBAR.KANBAN'),
-      icon: 'i-lucide-kanban',
-      to: accountScopedRoute('kanban_index'),
-      activeOn: ['kanban_index'],
-    },
-    {
-      name: 'Billing',
-      label: 'Billing',
-      icon: 'i-lucide-credit-card',
-      to: accountScopedRoute('billing_settings_index'),
-    },
     {
       name: 'Portals',
       label: t('SIDEBAR.HELP_CENTER.TITLE'),
@@ -733,12 +702,14 @@ const menuItems = computed(() => {
           icon: 'i-lucide-shield',
           to: accountScopedRoute('security_settings_index'),
         },
-        {
-          name: 'Settings Billing',
-          label: t('SIDEBAR.BILLING'),
-          icon: 'i-lucide-credit-card',
-          to: accountScopedRoute('billing_settings_index'),
-        },
+        ...(isSuperAdmin
+          ? [{
+              name: 'Settings Billing',
+              label: t('SIDEBAR.BILLING'),
+              icon: 'i-lucide-credit-card',
+              to: accountScopedRoute('billing_settings_index'),
+            }]
+          : []),
       ],
     },
   ];
