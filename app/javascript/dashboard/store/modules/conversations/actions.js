@@ -280,37 +280,6 @@ const actions = {
     }
   },
 
-  moveKanban: async ({ commit, state }, { conversationId, kanbanColumnId }) => {
-    const existingConversation = state.allConversations.find(
-      conversation => conversation.id === conversationId
-    );
-    const previousKanbanColumnId = existingConversation?.kanban_column_id;
-
-    if (existingConversation) {
-      commit(types.UPDATE_CONVERSATION, {
-        ...existingConversation,
-        kanban_column_id: kanbanColumnId,
-      });
-    }
-
-    try {
-      const response = await ConversationApi.moveKanban({
-        conversationId,
-        kanbanColumnId,
-      });
-      commit(types.UPDATE_CONVERSATION, response.data);
-      return response;
-    } catch (error) {
-      if (existingConversation) {
-        commit(types.UPDATE_CONVERSATION, {
-          ...existingConversation,
-          kanban_column_id: previousKanbanColumnId,
-        });
-      }
-      throw error;
-    }
-  },
-
   createPendingMessageAndSend: async ({ dispatch }, data) => {
     const pendingMessage = createPendingMessage(data);
     dispatch('sendMessageWithData', pendingMessage);
