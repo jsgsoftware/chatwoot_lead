@@ -55,7 +55,8 @@ const actions = {
         params.assigneeType
       );
     } catch (error) {
-      // Handle error
+      commit(types.CLEAR_LIST_LOADING_STATUS);
+      Sentry.captureException(error);
     }
   },
 
@@ -70,7 +71,8 @@ const actions = {
         'appliedFilters'
       );
     } catch (error) {
-      // Handle error
+      commit(types.CLEAR_LIST_LOADING_STATUS);
+      Sentry.captureException(error);
     }
   },
 

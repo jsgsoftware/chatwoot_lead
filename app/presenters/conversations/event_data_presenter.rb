@@ -7,7 +7,7 @@ class Conversations::EventDataPresenter < SimpleDelegator
       contact_inbox: contact_inbox,
       id: display_id,
       inbox_id: inbox_id,
-      kanban_column_id: kanban_column_id,
+      kanban_column_id: attributes['kanban_column_id'],
       messages: push_messages,
       labels: label_list,
       meta: push_meta,
