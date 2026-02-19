@@ -41,6 +41,7 @@ const emit = defineEmits([
 const { accountScopedRoute, isOnChatwootCloud } = useAccount();
 // Get current user role from Vuex store
 const currentRole = useMapGetter('auth/getCurrentRole');
+const currentUser = useMapGetter('getCurrentUser');
 const store = useStore();
 const searchShortcut = useKbd([`$mod`, 'k']);
 const { t } = useI18n();
@@ -224,7 +225,9 @@ const reportRoutes = computed(() => newReportRoutes());
 
 const menuItems = computed(() => {
   // Only show Kanban and Billing to SuperAdmin
-  const isSuperAdmin = currentRole.value === 'superadmin';
+  const isSuperAdmin =
+    currentUser.value?.type === 'SuperAdmin' ||
+    currentRole.value === 'superadmin';
   const items = [
     {
       name: 'Inbox',
