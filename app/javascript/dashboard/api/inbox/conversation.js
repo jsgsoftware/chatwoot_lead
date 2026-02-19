@@ -137,6 +137,12 @@ class ConversationApi extends ApiClient {
     return axios.get(`${this.url}/${conversationId}/inbox_assistant`);
   }
 
+  moveKanban({ conversationId, kanbanColumnId }) {
+    return axios.patch(`${this.url}/${conversationId}/move_kanban`, {
+      kanban_column_id: kanbanColumnId,
+    });
+  }
+
   delete(conversationId) {
     return axios.delete(`${this.url}/${conversationId}`);
   }

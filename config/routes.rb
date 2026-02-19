@@ -119,6 +119,8 @@ Rails.application.routes.draw do
           end
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
+          resources :kanban_boards, only: [:show]
+          resources :kanban_columns, only: [:create, :update]
           namespace :channels do
             resource :twilio_channel, only: [:create]
           end
@@ -151,6 +153,7 @@ Rails.application.routes.draw do
               post :update_last_seen
               post :unread
               post :custom_attributes
+              patch :move_kanban
               get :attachments
               get :inbox_assistant
               get :reporting_events if ChatwootApp.enterprise?

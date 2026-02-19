@@ -136,6 +136,15 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     @conversation.save!
   end
 
+  def move_kanban
+    kanban_column_id = params.require(:kanban_column_id)
+    kanban_column = KanbanColumn.joins(:board)
+                               .where(kanban_boards: { account_id: Current.account.id })
+                               .find(kanban_column_id)
+
+    Kanban::MoveConversationService.new(conversation: @conversation, kanban_column: kanban_column).perform
+  end
+
   def destroy
     authorize @conversation, :destroy?
     ::DeleteObjectJob.perform_later(@conversation, Current.user, request.ip)
